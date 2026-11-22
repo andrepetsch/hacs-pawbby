@@ -26,8 +26,15 @@ from .const import (
 from .coordinator import PawbbyCoordinator
 from .protocol import SETTING_KEYS
 
-# Entity platforms are added in the next phase (sensor, switch, ...).
-PLATFORMS: list[Platform] = []
+PLATFORMS: list[Platform] = [
+    Platform.BINARY_SENSOR,
+    Platform.BUTTON,
+    Platform.EVENT,
+    Platform.NUMBER,
+    Platform.SELECT,
+    Platform.SENSOR,
+    Platform.SWITCH,
+]
 
 SERVICE_ACTION = "action"
 SERVICE_TARE = "tare"

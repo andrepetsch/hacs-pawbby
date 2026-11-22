@@ -296,10 +296,25 @@ class StateMachine:
 
     @property
     def last_visit(self) -> LitterEvent | None:
+        return self.last_event_of("toileted")
+
+    def last_event_of(self, *types: str) -> LitterEvent | None:
         for ev in reversed(self.events):
-            if ev.type == "toileted":
+            if ev.type in types:
                 return ev
         return None
+
+    def cat_stats(self, cat_id: str) -> dict[str, Any]:
+        """Per-cat sensor values derived from the in-memory event log."""
+        evs = [e for e in self.events if e.type == "toileted" and e.pet_id == cat_id]
+        midnight = self._now() - (self._now() % 86400)
+        last = evs[-1] if evs else None
+        return {
+            "last_used_at": last.timestamp if last else None,
+            "latest_weight_kg": last.weight_kg if last else None,
+            "last_duration_s": last.duration_s if last else None,
+            "visits_today": sum(1 for e in evs if e.timestamp >= midnight),
+        }
 
     def visits_today(self) -> int:
         """Count 'toileted' events since local midnight (injectable clock)."""
