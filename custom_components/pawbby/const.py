@@ -81,10 +81,13 @@ BENIGN_DP114 = frozenset({"motor_ok", "deodorant_reset"})
 MOTOR_FAULT_PATTERN = ("motor", "err", "fault", "fail", "stall", "stuck", "block", "over", "timeout")
 
 # Event types fired on the HA event bus (replaces Pawbby-Reborn's webhooks).
+# "-button" variants are triggered by the box's physical button; the plain
+# variants are triggered via this integration (HA service/entity call).
 EVENT_TYPES = [
     "toileted", "quick-visit",
-    "auto-clean", "manual-clean", "clean-completed",
-    "flatten", "auto-flatten", "empty",
+    "auto-clean", "manual-clean", "manual-clean-button", "clean-completed",
+    "flatten", "auto-flatten", "flatten-button",
+    "empty", "empty-button",
     "lid-removed", "lid-replaced",
     "bin-removed", "bin-replaced", "bin-full", "bin-normal",
     "litter-low", "litter-sufficient",
