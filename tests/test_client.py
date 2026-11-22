@@ -283,15 +283,45 @@ def test_heartbeat_and_account_sync_after_connect():
         )
         await client.start()
         await asyncio.wait_for(connected.wait(), timeout=2)
-        # wait for heartbeat ticks + the delayed account sync (tz + unit on DP 105)
+        # heartbeats: poll briefly (initial connect + ticks)
         deadline = time.monotonic() + 2
-        while time.monotonic() < deadline:
-            if fake.status_calls >= 3 and len(fake.set_calls) >= 2:
-                break
+        while time.monotonic() < deadline and fake.status_calls < 3:
             await asyncio.sleep(0.01)
+        # account sync: await its task deterministically instead of racing the clock
+        sync_task = client._account_sync_task
+        assert sync_task is not None
+        await asyncio.wait_for(asyncio.shield(sync_task), timeout=2)
         await client.stop()
         assert fake.status_calls >= 3  # initial connect + heartbeats
         payloads = [c[1] for c in fake.set_calls]
         assert payloads == ["AQkAAQA=", "AQoAAQA="]  # UTC offset 0, kg
+
+    asyncio.run(run())
+
+
+def test_account_sync_fires_on_freshly_booted_machine():
+    """Regression: time.monotonic() is seconds since BOOT. On a fresh CI
+    container uptime < 600 s, so a 0.0 'last sync' default would wrongly
+    trigger the 10-min cooldown and skip the account sync entirely."""
+
+    async def run():
+        fake = FakeDevice()
+        connected = asyncio.Event()
+        client = make_client(
+            fake,
+            timezone_name="UTC",
+            weight_unit="kg",
+            on_connected=lambda: connected.set(),
+            account_sync_delay=0.01,
+            monotonic=lambda: 30.0,  # uptime 30 s < 600 s cooldown
+        )
+        await client.start()
+        await asyncio.wait_for(connected.wait(), timeout=2)
+        sync_task = client._account_sync_task
+        assert sync_task is not None
+        await asyncio.wait_for(asyncio.shield(sync_task), timeout=2)
+        await client.stop()
+        payloads = [c[1] for c in fake.set_calls]
+        assert payloads == ["AQkAAQA=", "AQoAAQA="]
 
     asyncio.run(run())

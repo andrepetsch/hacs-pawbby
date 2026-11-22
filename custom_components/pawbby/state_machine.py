@@ -50,6 +50,12 @@ class LitterEvent:
     description: str = ""
 
 
+# -inf (not 0.0) for all "last event" timestamps: the clock is injectable and
+# may be time.monotonic() (seconds since BOOT) — on a freshly booted machine
+# 0.0 would make every event look like a recent duplicate and suppress it.
+NEG_INF = float("-inf")
+
+
 @dataclass
 class BoxState:
     status_raw: str = "unknown"
@@ -64,12 +70,12 @@ class BoxState:
     is_litter_low: bool = False
     is_drum_removed: bool = False
     pending_litter_check: bool = False
-    last_clean: float = 0.0
-    last_flatten: float = 0.0
-    last_empty: float = 0.0
-    last_cat_leave: float = 0.0
-    last_clean_completed: float = 0.0
-    last_weight_unit_sync: float = 0.0
+    last_clean: float = NEG_INF
+    last_flatten: float = NEG_INF
+    last_empty: float = NEG_INF
+    last_cat_leave: float = NEG_INF
+    last_clean_completed: float = NEG_INF
+    last_weight_unit_sync: float = NEG_INF
     settings: DeviceSettings | None = None
     settings_updated_at: float | None = None
     last_settings_raw: str | None = None
@@ -98,7 +104,7 @@ class StateMachine:
         self._now = now
         self.state = BoxState()
         self.events: deque[LitterEvent] = deque(maxlen=max_events)
-        self._last_app_action = 0.0
+        self._last_app_action = NEG_INF
 
     def mark_app_action(self) -> None:
         """Call when this integration itself sent a motor command."""

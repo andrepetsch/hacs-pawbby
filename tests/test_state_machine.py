@@ -289,6 +289,21 @@ def test_weight_unit_mismatch_triggers_sync_once_per_cooldown():
 # --- snapshot ------------------------------------------------------------------------
 
 
+def test_events_not_suppressed_on_freshly_booted_machine():
+    """Regression: with a monotonic clock (seconds since boot), uptime 30 s
+    must NOT make the 60 s event-dedup swallow the very first events."""
+    sm = StateMachine(now=lambda: 30.0)
+    sm.handle_dps({"116": "work_idle"})
+    events, _ = sm.handle_dps({"116": "work_aclean"})
+    assert [e.type for e in events] == ["auto-clean"]
+    events, _ = sm.handle_dps({"116": "collect_full"})
+    assert [e.type for e in events] == ["bin-full"]
+    # weight-unit sync cooldown (600 s) must not block the first sync either
+    sm2 = StateMachine(now=lambda: 30.0, desired_weight_unit="lb")
+    _, commands = sm2.handle_dps({"103": DP103_FACTORY})  # box reports kg, want lb
+    assert len(commands) == 1 and commands[0].payload == "AQoAAQE="
+
+
 def test_snapshot_status_mapping():
     sm, _ = make_sm()
     assert sm.snapshot()["status"] == "Unknown"  # no DP 116 seen yet

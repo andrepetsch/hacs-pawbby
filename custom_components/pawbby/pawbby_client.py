@@ -95,6 +95,7 @@ class PawbbyTuyaClient:
         account_sync_delay: float = DEFAULT_ACCOUNT_SYNC_DELAY,
         account_sync_cooldown: float = DEFAULT_ACCOUNT_SYNC_COOLDOWN,
         dedup_window: float = DEFAULT_DEDUP_WINDOW,
+        monotonic: Callable[[], float] = time.monotonic,
     ) -> None:
         self._device_id = device_id
         self._local_key = local_key
@@ -121,7 +122,10 @@ class PawbbyTuyaClient:
         self._account_sync_task: asyncio.Task | None = None
         self._last_key: str | None = None
         self._last_time = 0.0
-        self._last_account_sync = 0.0
+        # -inf (not 0.0): time.monotonic() is seconds since BOOT, so on a freshly
+        # booted machine 0.0 would look like "synced recently" and skip the sync.
+        self._last_account_sync = float("-inf")
+        self._monotonic = monotonic
 
     # ------------------------------------------------------------------ state
 
@@ -213,7 +217,7 @@ class PawbbyTuyaClient:
     async def _handle_message(self, msg: Any) -> None:
         """Dedup identical payloads (the box re-sends 'data' and 'dp-refresh')."""
         key = json.dumps(msg, sort_keys=True, default=str)
-        now = time.monotonic()
+        now = self._monotonic()
         if key == self._last_key and now - self._last_time < self._dedup_window:
             return
         self._last_key = key
@@ -244,7 +248,7 @@ class PawbbyTuyaClient:
         makes the box emit a fresh DP 103 settings snapshot within ~1 s.
         """
         await asyncio.sleep(self._account_sync_delay)
-        now = time.monotonic()
+        now = self._monotonic()
         if now - self._last_account_sync < self._account_sync_cooldown:
             return
         self._last_account_sync = now
