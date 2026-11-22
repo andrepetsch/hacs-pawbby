@@ -1,12 +1,12 @@
 {
-  "domain": "pawbby",
-  "name": "Pawbby Smart Litter Box",
   "codeowners": ["@andrepetsch"],
   "config_flow": true,
   "documentation": "https://github.com/andreptsch/hacs-pawbby",
+  "domain": "pawbby",
   "integration_type": "device",
   "iot_class": "local_push",
   "issue_tracker": "https://github.com/andreptsch/hacs-pawbby/issues",
+  "name": "Pawbby Smart Litter Box",
   "requirements": ["tinytuya>=1.17.0"],
   "version": "0.1.0"
 }
