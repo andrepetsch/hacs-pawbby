@@ -82,6 +82,15 @@ check(
 hacs = json.loads((ROOT / "hacs.json").read_text())
 check("name" in hacs, "hacs.json missing 'name'")
 
+# HACS brands check: the repo must provide brand assets locally
+brand = CC / "brand"
+check((brand / "icon.png").exists(), "missing brand/icon.png (HACS brands check)")
+check((brand / "logo.png").exists(), "missing brand/logo.png (HACS brands check)")
+for name in ("icon.png", "logo.png"):
+    p = brand / name
+    if p.exists():
+        check(p.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n", f"brand/{name} is not a PNG")
+
 if errors:
     print("INTEGRATION CHECK FAILED:")
     for e in errors:

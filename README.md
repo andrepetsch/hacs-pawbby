@@ -79,6 +79,23 @@ automation:
             {{ trigger.event.data.duration_s }} s).
 ```
 
+## Publishing to HACS
+
+The repository must have a description and at least one valid topic on
+GitHub (the HACS `check-repository` validation fails otherwise). Set them
+once with the GitHub CLI:
+
+```bash
+gh repo edit andrepetsch/hacs-pawbby \
+  --description "Standalone Home Assistant (HACS) integration for the Pawbby smart cat litter box — 100% local Tuya control, no cloud, no Pawbby-Reborn server needed." \
+  --add-topic home-assistant --add-topic hacs --add-topic hacs-integration \
+  --add-topic tuya --add-topic pawbby --add-topic litter-box
+```
+
+Brand assets are shipped in-repo at `custom_components/pawbby/brand/`
+(`icon.png` 256×256, `logo.png`), so no entry in the central brands
+repository is needed.
+
 ## Development
 
 ```bash

@@ -1,4 +1,5 @@
 {
+  "categories": ["vacuum"],
   "codeowners": ["@andrepetsch"],
   "config_flow": true,
   "documentation": "https://github.com/andreptsch/hacs-pawbby",
