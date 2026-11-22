@@ -1,5 +1,5 @@
 {
-  "categories": ["vacuum"],
+  "categories": ["pets"],
   "codeowners": ["@andrepetsch"],
   "config_flow": true,
   "documentation": "https://github.com/andreptsch/hacs-pawbby",
