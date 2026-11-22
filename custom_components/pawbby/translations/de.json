@@ -1,0 +1,77 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Pawbby Smart Litter Box",
+        "description": "Trage die Tuya-Zugangsdaten deiner Katzentoilette ein (Geräte-ID + Local Key, wie vom Pawbby-Reborn-Einrichtungsassistenten ermittelt). Die Verbindung wird live getestet.",
+        "data": {
+          "device_id": "Tuya-Geräte-ID",
+          "local_key": "Tuya Local Key",
+          "ip": "IP-Adresse (optional, sonst per Broadcast gefunden)"
+        }
+      },
+      "cats": {
+        "title": "Katzen",
+        "description": "Lege bis zu 4 Katzen mit ihrem Profilgewicht an. Besuche werden der Katze zugeordnet, deren Gewicht am nächsten liegt (innerhalb 300 g). Leer lassen überspringt den Platz.",
+        "data": {
+          "cat_1_name": "Name Katze 1",
+          "cat_1_weight": "Gewicht Katze 1 (kg)",
+          "cat_2_name": "Name Katze 2",
+          "cat_2_weight": "Gewicht Katze 2 (kg)",
+          "cat_3_name": "Name Katze 3",
+          "cat_3_weight": "Gewicht Katze 3 (kg)",
+          "cat_4_name": "Name Katze 4",
+          "cat_4_weight": "Gewicht Katze 4 (kg)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Neu authentifizieren",
+        "description": "Die Toilette {device_id} hat den gespeicherten Local Key abgelehnt. Neuen Local Key eingeben.",
+        "data": {
+          "local_key": "Neuer Tuya Local Key"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zur Katzentoilette fehlgeschlagen. Geräte-ID, Local Key und IP prüfen.",
+      "invalid_weight": "Das Gewicht muss größer als 0 sein."
+    },
+    "abort": {
+      "already_configured": "Diese Katzentoilette ist bereits eingerichtet.",
+      "reauth_successful": "Neu-Authentifizierung erfolgreich."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Pawbby-Optionen",
+        "data": {
+          "scan_interval": "Fallback-Abfrageintervall (Sekunden)",
+          "weight_unit": "Gewichtseinheit (wird auf die Box gespiegelt)",
+          "cat_1_name": "Name Katze 1",
+          "cat_1_weight": "Gewicht Katze 1 (kg)",
+          "cat_2_name": "Name Katze 2",
+          "cat_2_weight": "Gewicht Katze 2 (kg)",
+          "cat_3_name": "Name Katze 3",
+          "cat_3_weight": "Gewicht Katze 3 (kg)",
+          "cat_4_name": "Name Katze 4",
+          "cat_4_weight": "Gewicht Katze 4 (kg)"
+        }
+      }
+    }
+  },
+  "services": {
+    "action": {
+      "name": "Aktion senden",
+      "description": "Motorbefehl an die Katzentoilette senden."
+    },
+    "tare": {
+      "name": "Waage nullen",
+      "description": "Eingebaute Waage tarieren (nullen)."
+    },
+    "set_setting": {
+      "name": "Geräteeinstellung ändern",
+      "description": "Hardware-Einstellung auf der Box ändern (DP 105)."
+    }
+  }
+}

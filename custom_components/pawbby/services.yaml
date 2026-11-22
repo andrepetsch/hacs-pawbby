@@ -1,0 +1,69 @@
+action:
+  name: Send action
+  description: Send a motor command to the litter box (refused while the box is busy or a cat is present).
+  fields:
+    device_id:
+      name: Device ID
+      description: Tuya device id of the litter box.
+      required: true
+      selector:
+        text:
+    action:
+      name: Action
+      description: clean starts a manual clean cycle, flatten levels the litter, empty dumps all litter into the waste bin (careful!), cancel_clean aborts a running cycle.
+      required: true
+      selector:
+        select:
+          options:
+            - clean
+            - flatten
+            - empty
+            - cancel_clean
+
+tare:
+  name: Zero scale
+  description: Tare / zero the built-in scale (DP 109).
+  fields:
+    device_id:
+      name: Device ID
+      description: Tuya device id of the litter box.
+      required: true
+      selector:
+        text:
+
+set_setting:
+  name: Change device setting
+  description: >-
+    Change a hardware setting stored on the box itself (DP 105): auto_clean,
+    sleep_mode, soft_clumps, auto_off_screen, child_lock (true/false),
+    auto_clean_delay (1-60), sleep_window ({"start": "22:00", "stop": "08:30"}),
+    litter_type (0-3 or name), reset_deodorant / refresh (no value).
+  fields:
+    device_id:
+      name: Device ID
+      description: Tuya device id of the litter box.
+      required: true
+      selector:
+        text:
+    setting:
+      name: Setting
+      required: true
+      selector:
+        select:
+          options:
+            - auto_clean
+            - soft_clumps
+            - sleep_mode
+            - auto_off_screen
+            - child_lock
+            - auto_clean_delay
+            - sleep_window
+            - litter_type
+            - reset_deodorant
+            - refresh
+    value:
+      name: Value
+      description: true/false, a number, a litter-type name, or a sleep window object.
+      required: true
+      selector:
+        object:

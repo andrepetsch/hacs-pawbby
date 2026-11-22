@@ -106,3 +106,17 @@ WEIGHT_MAX_G = 25000
 
 # A cat re-entering within this many seconds merges into the previous visit.
 SPLIT_VISIT_WINDOW_S = 15
+
+# --- config entry keys / options ----------------------------------------------
+CONF_DEVICE_ID = "device_id"      # Tuya device id
+CONF_LOCAL_KEY = "local_key"      # Tuya local key
+CONF_IP = "ip"                    # optional static IP (else broadcast discovery)
+CONF_CATS = "cats"                # [{id, name, weight_kg}]
+CONF_SCAN_INTERVAL = "scan_interval"  # fallback poll interval, seconds
+CONF_WEIGHT_UNIT = "weight_unit"  # "kg" | "lb" (mirrored onto the box, DP 105 gate 0A)
+
+DEFAULT_SCAN_INTERVAL = 30
+MAX_CATS = 4
+
+# HA event bus event fired for every litter-box event (type + payload).
+EVENT_PAWBBY = f"{DOMAIN}_event"

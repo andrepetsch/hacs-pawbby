@@ -1,0 +1,77 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Pawbby Smart Litter Box",
+        "description": "Enter the Tuya credentials of your litter box (device id + local key, as extracted by the Pawbby-Reborn setup wizard). The connection is tested live.",
+        "data": {
+          "device_id": "Tuya device ID",
+          "local_key": "Tuya local key",
+          "ip": "IP address (optional, discovered via broadcast otherwise)"
+        }
+      },
+      "cats": {
+        "title": "Cats",
+        "description": "Add up to 4 cats with their profile weight. Visits are attributed to the cat whose weight is closest (within 300 g). Leave a name empty to skip a slot.",
+        "data": {
+          "cat_1_name": "Cat 1 name",
+          "cat_1_weight": "Cat 1 weight (kg)",
+          "cat_2_name": "Cat 2 name",
+          "cat_2_weight": "Cat 2 weight (kg)",
+          "cat_3_name": "Cat 3 name",
+          "cat_3_weight": "Cat 3 weight (kg)",
+          "cat_4_name": "Cat 4 name",
+          "cat_4_weight": "Cat 4 weight (kg)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate",
+        "description": "The litter box {device_id} rejected the stored local key. Enter the new local key.",
+        "data": {
+          "local_key": "New Tuya local key"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the litter box. Check device id, local key and IP.",
+      "invalid_weight": "Weight must be greater than 0."
+    },
+    "abort": {
+      "already_configured": "This litter box is already configured.",
+      "reauth_successful": "Re-authentication was successful."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Pawbby options",
+        "data": {
+          "scan_interval": "Fallback poll interval (seconds)",
+          "weight_unit": "Weight unit (mirrored to the box)",
+          "cat_1_name": "Cat 1 name",
+          "cat_1_weight": "Cat 1 weight (kg)",
+          "cat_2_name": "Cat 2 name",
+          "cat_2_weight": "Cat 2 weight (kg)",
+          "cat_3_name": "Cat 3 name",
+          "cat_3_weight": "Cat 3 weight (kg)",
+          "cat_4_name": "Cat 4 name",
+          "cat_4_weight": "Cat 4 weight (kg)"
+        }
+      }
+    }
+  },
+  "services": {
+    "action": {
+      "name": "Send action",
+      "description": "Send a motor command to the litter box."
+    },
+    "tare": {
+      "name": "Zero scale",
+      "description": "Tare / zero the built-in scale."
+    },
+    "set_setting": {
+      "name": "Change device setting",
+      "description": "Change a hardware setting stored on the box (DP 105)."
+    }
+  }
+}
