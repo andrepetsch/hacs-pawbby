@@ -1,3 +1,40 @@
+[project]
+name = "hacs-pawbby"
+version = "0.1.0"
+description = "Standalone Home Assistant (HACS) custom component for the Pawbby smart litter box — 100% local Tuya control, no cloud."
+readme = "README.md"
+authors = [
+    { name = "andrepetsch", email = "andre.petsch@outlook.com" }
+]
+requires-python = ">=3.14.2"  # matches homeassistant>=2026.10.4
+# The integration's runtime dependency is tinytuya. It is declared in
+# custom_components/pawbby/manifest.json ("requirements") — Home Assistant
+# installs it into its own venv when the component is set up. This repo is
+# NOT a pip package (see [tool.uv] package = false), so [project].dependencies
+# stays empty and everything needed for development/tests lives in the dev
+# dependency group below.
+dependencies = []
+
+[tool.uv]
+# HACS custom component: no build backend, uv only manages the dev venv.
+package = false
+
+[dependency-groups]
+dev = [
+    # test harness: real HomeAssistant + custom-component pytest plugin
+    "homeassistant>=2026.10.4",
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "pytest-homeassistant-custom-component>=0.13",
+    # runtime dependency of the integration (HA installs it from the manifest);
+    # also needed here for manual runs against real hardware
+    "tinytuya>=1.17.0",
+    # used by scripts/check_integration.py
+    "pyyaml>=6.0",
+    # zoneinfo database on minimal Linux systems
+    "tzdata>=2024.1 ; sys_platform == 'linux'",
+]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"

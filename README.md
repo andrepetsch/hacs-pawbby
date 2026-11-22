@@ -98,11 +98,16 @@ repository is needed.
 
 ## Development
 
+Managed with [uv](https://docs.astral.sh/uv/). The repo is not a pip package
+(`package = false`); uv only maintains the dev venv. The integration's runtime
+dependency `tinytuya` is declared in `custom_components/pawbby/manifest.json`
+and installed by Home Assistant itself — for local dev it's in the `dev`
+dependency group.
+
 ```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements_test.txt
-.venv/bin/python scripts/check_integration.py   # structural HACS/hassfest checks
-.venv/bin/python -m pytest                      # 128 tests incl. HA harness
+uv sync                                      # install dev deps from uv.lock
+uv run python scripts/check_integration.py   # structural HACS/hassfest checks
+uv run pytest                                # 128 tests incl. HA harness
 ```
 
 Protocol tests run against the hardware-confirmed vectors from Pawbby-Reborn
